@@ -7,4 +7,3 @@ def alarmOn():
     
 def alarmOff():
     buzzer.off()
-        
