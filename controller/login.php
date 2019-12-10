@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include "api.php";
+    include "../model/api.php";
 
     $email = $_POST['emailinput'];
     $email = htmlspecialchars($email);
@@ -17,13 +17,13 @@
     if (password_verify($pass, $hashed))
     {
         //Success
-        echo true;
+        
         $cookie_name = "session";
         $cookie_value = "Angelo";
         setcookie($cookie_name, $cookie_value, time() + (1200), "/"); // 20 mins
         $_SESSION["user"] = $_COOKIE['session'];
-        
-        
+        session_start();
+        echo true;
     }
     else
     {

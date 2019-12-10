@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include "api.php";
+    include "../model/api.php";
     $topic = $_POST['topic'];
     pub($topic);
     

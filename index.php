@@ -1,8 +1,8 @@
 <?php
     session_start();
-    include 'api.php';
+    include 'model/api.php';
     if(!ValidateSession()){
-        header("Location: login.html"); 
+        header("Location: view/login.html"); 
     }
 ?>
 <!DOCTYPE html>
@@ -19,52 +19,53 @@
         .btn-custom {
             width: 100%;
         }
+
+        body {
+            background: #f8f8f8;
+        }
     </style>
 </head>
 
 <body>
     <br>
     <div class="container">
-        <div class="row">
+        <!-- CAMERA START -->
+        <div style="padding:30px;border: 2px solid #0570E4;border-radius:8px;margin-bottom: 20px;" class="row">
             <div class="col-12">
+                <h2 style="text-align:center;">Camera</h2>
+                <img style="display:none;margin: 15px 0;border:2px solid #0570E4;" id="cam-img" width="100%"
+                    height="auto" src="">
                 <div id="take-photo" class="btn btn-primary btn-custom" type="button">Take Pic</div>
-                <br>
                 <h3 style="display:none;" id="h3-img-loading" style="color: red;">Please Wait. Your image is loading...
                 </h3>
             </div>
-            <br><br>
+        </div>
+        <!-- CAMERA END -->
+        <div style="padding:30px;border: 2px solid #0570E4;border-radius:8px;margin-bottom: 20px;" class="row">
             <div class="col-12">
-                <img style="display:none" id="cam-img" width="100%" height="auto" src="">
+                <div id="arm-alarm" class="btn btn-primary btn-custom" type="button">Turn on panic button</div>
             </div>
-            <br><br>
-            <div class="col-12">
-                <div id="arm-alarm" class="btn btn-primary btn-custom" type="button">Set Alarm On</div>
-            </div>
-            <br><br>
 
         </div>
-        <div class="row">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1" value="alarm">
-                <label class="custom-control-label" for="customCheck1">Alarm</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck2" value="distance">
-                <label class="custom-control-label" for="customCheck2">Distance</label>
-            </div>
-        </div>
-        <div class="row">
+        <div style="padding:30px;border: 2px solid #0570E4;border-radius:8px;margin-bottom: 20px;" class="row">
+
             <div class="col-12">
+                <div style="margin-bottom: 10px;" class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" value="alarm">
+                    <label class="custom-control-label" for="customCheck1">Alarm</label>
+                </div>
                 <div id="sub-topics" class="btn btn-primary btn-custom" type="button">Subscribe to topics</div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div id="pub-topics" class="btn btn-primary btn-custom" type="button">Publish to topics</div>
+            <div style="margin-top: 10px;" class="col-12">
+                <div id="pub-topics" class="btn btn-danger btn-custom" type="button">Sound the alarm!</div>
             </div>
         </div>
+        <div class="row">
+            <div style="width: 250px;margin-top: 10px;" class="col-12">
+                <div id="logout" class="btn btn-danger" type="button">Log Out</div>
+            </div>
+        </div>
+
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -78,18 +79,17 @@
         $("#take-photo").click(function () {
             $("#h3-img-loading").css("display", "block");
             $.ajax({
-                url: '/pic.php',
+                url: 'controller/pic.php',
                 type: 'POST'
             }).done(function (data) {
-                var homeurl = window.location.href.replace('index.php','');
-                $("#cam-img").attr("src", homeurl + data);
+                $("#cam-img").attr("src", data);
                 $("#cam-img").css("display", "block");
                 $("#h3-img-loading").css("display", "none");
             });
         });
         $("#arm-alarm").click(function () {
             $.ajax({
-                url: '/alarmon.php',
+                url: 'controller/alarmon.php',
                 type: 'POST'
             }).done(function (data) {
 
@@ -102,38 +102,42 @@
             if ($("#customCheck2").prop("checked")) {
                 subToMqtt($("#customCheck2").val())
             }
-
         });
         $("#pub-topics").click(function () {
-            if ($("#customCheck1").prop("checked")) {
-                pubToMqtt($("#customCheck1").val())
-            }
-            if ($("#customCheck2").prop("checked")) {
-                pubToMqtt($("#customCheck2").val())
-            }
-
+            pubToMqtt('alarm')
         });
-
+        $("#logout").click(function () {
+            logout()
+        });
         function subToMqtt(theTopic) {
             $.ajax({
-                url: '/sub.php',
+                url: 'controller/sub.php',
                 type: 'POST',
                 data: {
                     topic: theTopic
                 }
             }).done(function (data) {
-                alert(data)
+                //nothing
             });
         }
+
         function pubToMqtt(theTopic) {
             $.ajax({
-                url: '/pub.php',
+                url: 'controller/pub.php',
                 type: 'POST',
                 data: {
                     topic: theTopic
                 }
             }).done(function (data) {
-                //alert(data)
+                //nothing
+            });
+        }
+        function logout() {
+            $.ajax({
+                url: 'controller/logout.php',
+                type: 'POST'
+            }).done(function (data) {
+                window.location.replace("view/login.html");
             });
         }
     </script>

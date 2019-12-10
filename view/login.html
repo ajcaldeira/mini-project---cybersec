@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Document</title>
+    <style>
+    form{
+        border:2px solid #0570e4;
+        border-radius: 8px;
+        padding: 30px;
+        margin-top: 40px;
+    }
+    </style>
 </head>
 
 <body>
@@ -23,10 +31,6 @@
             <div class="form-group">
                 <label for="inputPass">Password</label>
                 <input type="password" class="form-control" id="inputPass" placeholder="Password">
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
             </div>
             <button id="login-btn" type="button" class="btn btn-primary">Submit</button>
         </form>
@@ -45,14 +49,14 @@
             var mypass = $("#inputPass").val();
 
             $.ajax({
-                url: '/login.php',
+                url: '../controller/login.php',
                 type: 'POST',
                 data: {
                     emailinput: myemail,
                     passinput: mypass
                 }
             }).done(function (data) {
-                window.location.replace("/index.php");
+                window.location.replace("../index.php");
             });
         });
     </script>

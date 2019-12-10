@@ -4,6 +4,12 @@ from time import sleep
 import ac_buzzer
 import sys
 
+def turnOffFromMQTT():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.wait_for_edge(25, GPIO.FALLING)
+    ac_buzzer.alarmOff()
+    #GPIO.cleanup()
 
 def listen():
     print("Alarm Listening")
