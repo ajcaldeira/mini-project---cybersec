@@ -17,10 +17,14 @@
     if (password_verify($pass, $hashed))
     {
         //Success
-        
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randstring = '';
+        for ($i = 0; $i < 10; $i++) {
+            $randstring = $characters[rand(0, strlen($characters))];
+        }
         $cookie_name = "session";
-        $cookie_value = "Angelo";
-        setcookie($cookie_name, $cookie_value, time() + (1200), "/"); // 20 mins
+        $cookie_value = $randstring;
+        setcookie($cookie_name, $cookie_value, time() + (1200), "/",1); // 20 mins //not accessible through scripting languages
         $_SESSION["user"] = $_COOKIE['session'];
         session_start();
         echo true;
