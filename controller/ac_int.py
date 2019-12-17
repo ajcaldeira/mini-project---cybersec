@@ -9,7 +9,6 @@ def turnOffFromMQTT():
     GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.wait_for_edge(25, GPIO.FALLING)
     ac_buzzer.alarmOff()
-    #GPIO.cleanup()
 
 def listen():
     print("Alarm Listening")
@@ -19,7 +18,7 @@ def listen():
     GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     ac_buzzer.alarmOff()
     try:
-        GPIO.wait_for_edge(25, GPIO.FALLING)
+        GPIO.wait_for_edge(25, GPIO.RISING)
         ac_buzzer.alarmOn()
         GPIO.wait_for_edge(25, GPIO.FALLING)
         ac_buzzer.alarmOff()

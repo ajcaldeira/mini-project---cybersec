@@ -14,25 +14,17 @@
     $checkEmail = json_decode($login);
     $hashed = $checkEmail->password;
     
+    //compare the entered password with the hash from dynamodb
     if (password_verify($pass, $hashed))
     {
         //Success
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randstring = '';
-        for ($i = 0; $i < 10; $i++) {
-            $randstring = $characters[rand(0, strlen($characters))];
-        }
-        $cookie_name = "session";
-        $cookie_value = $randstring;
-        setcookie($cookie_name, $cookie_value, time() + (1200), "/",1); // 20 mins //not accessible through scripting languages
-        $_SESSION["user"] = $_COOKIE['session'];
+        $_SESSION['user'] = true;
         session_start();
-        echo true;
     }
     else
     {
         //Failure
-        echo false;
+        return false;
     }
     
 ?>
